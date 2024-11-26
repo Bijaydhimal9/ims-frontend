@@ -39,17 +39,14 @@ const Login = () => {
     }
 
     if (isAuthenticated) {
-        return <Navigate to="/dashboard" state={{ from: location }} replace />;
+        return <Navigate to="/inmates" state={{ from: location }} replace />;
     }
 
     const handleSubmit = async (values: LoginCredentials) => {
         try {
-            await login(values);
+            await login(values);;
         } catch (error) {
-            console.error('Login failed:', error);
-
             toast({
-
                 variant: "destructive",
                 title: "Authentication Error",
                 description: "Invalid email or password.",
@@ -121,11 +118,11 @@ const Login = () => {
                                 </Button>
 
                                 {/* Demo credentials */}
-                                <div className="mt-4 text-center text-sm text-gray-500">
+                                {/* <div className="mt-4 text-center text-sm text-gray-500">
                                     <p>Demo credentials:</p>
                                     <p>Email: test@test.com</p>
                                     <p>Password: 1234@123</p>
-                                </div>
+                                </div> */}
                             </Form>
                         )}
                     </Formik>
