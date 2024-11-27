@@ -1,6 +1,8 @@
+import { DeleteDialog } from "@/components/DeleteDialog";
 import { InmateModel } from "@/types/inmate";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { useState } from "react";
+import { useBookingDeleteMutation } from "./useBookings";
 
 interface BookingListTableProps {
   isLoading: boolean;
@@ -10,39 +12,38 @@ interface BookingListTableProps {
 const BookingListTable = ({ isLoading, bookings }: BookingListTableProps) => {
   const [inmateModel, setInmateModel] = useState<InmateModel | null>(null);
 
-//   const onCloseDialog = () => {
-//     setInmateModel(null);
-//   };
+  //   const onCloseDialog = () => {
+  //     setInmateModel(null);
+  //   };
 
-//   const { mutateAsync: updateMutateAsync } = useInmateUpdateMutation();
+  //   const { mutateAsync: updateMutateAsync } = useInmateUpdateMutation();
 
-//   const onUpdateInmate = async (model: InmateModel) => {
-//     await updateMutateAsync(model);
-//   };
+  //   const onUpdateInmate = async (model: InmateModel) => {
+  //     await updateMutateAsync(model);
+  //   };
 
-//   const { mutateAsync: deleteMutateAsync } = useInmateDeleteMutation();
-//   const onCloseDeleteDialog = () => {
-//     setDeleteInmateId(null);
-//   };
+  const [deleteBookingId, setDeleteBookingId] = useState<string | null>(null);
 
-//   const onDeleteInmate = () => {
-//     deleteMutateAsync(deleteInmateId);
-//     onCloseDeleteDialog();
-//   };
+  const { mutateAsync: deleteMutateAsync } = useBookingDeleteMutation();
+  const onCloseDeleteDialog = () => {
+    setDeleteBookingId(null);
+  };
 
-//   const [deleteInmateId, setDeleteInmateId] = useState<string | null>(null);
-
+  const onDeleteBooking = () => {
+    deleteMutateAsync(deleteBookingId);
+    onCloseDeleteDialog();
+  };
 
   const columns: GridColDef[] = [
     {
-        field: "bookingDate",
-        headerName: "Booking Date",
-        minWidth: 150,
-        flex: 1,
-        renderCell: (param) => (
-          <>{new Date(param.row.bookingDate).toLocaleDateString()}</>
-        ),
-      },
+      field: "bookingDate",
+      headerName: "Booking Date",
+      minWidth: 150,
+      flex: 1,
+      renderCell: (param) => (
+        <>{new Date(param.row.bookingDate).toLocaleDateString()}</>
+      ),
+    },
     {
       field: "bookingNumber",
       headerName: "Booking Number",
@@ -50,17 +51,23 @@ const BookingListTable = ({ isLoading, bookings }: BookingListTableProps) => {
       flex: 1,
     },
     {
-        field: "bookingLocation",
-        headerName: "Booking Location",
-        minWidth: 150,
-        flex: 1,
-      },
-      {
-        field: "facilityName",
-        headerName: "Facility Name",
-        minWidth: 150,
-        flex: 1,
-      },
+      field: "inmateName",
+      headerName: "Inmate Name",
+      minWidth: 150,
+      flex: 1,
+    },
+    {
+      field: "bookingLocation",
+      headerName: "Booking Location",
+      minWidth: 150,
+      flex: 1,
+    },
+    {
+      field: "facilityName",
+      headerName: "Facility Name",
+      minWidth: 150,
+      flex: 1,
+    },
     {
       field: "actions",
       headerName: "Actions",
@@ -91,7 +98,7 @@ const BookingListTable = ({ isLoading, bookings }: BookingListTableProps) => {
           <button
             className="p-1.5 text-red-600 hover:text-red-800 hover:bg-red-50 rounded-full transition-colors"
             title="Delete inmate"
-            // onClick={() => setDeleteInmateId(param.row.id)}
+            onClick={() => setDeleteBookingId(param.row.id)}
           >
             <svg
               className="w-4 h-4"
@@ -122,13 +129,13 @@ const BookingListTable = ({ isLoading, bookings }: BookingListTableProps) => {
           inmateModel={inmateModel}
         />
       )} */}
-      {/* <DeleteDialog
-        isOpen={deleteInmateId !== null}
-        title="Delete Inmate"
-        message="Are you sure you want to delete this inmate? This action cannot be undone."
+      <DeleteDialog
+        isOpen={deleteBookingId !== null}
+        title="Delete Booking"
+        message="Are you sure you want to delete this booking? This action cannot be undone."
         onClose={onCloseDeleteDialog}
-        onConfirm={onDeleteInmate}
-      /> */}
+        onConfirm={onDeleteBooking}
+      />
       <DataGrid
         loading={isLoading}
         rows={bookings ? bookings : []}

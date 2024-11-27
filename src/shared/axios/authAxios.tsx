@@ -3,7 +3,7 @@ import Qs from "qs";
 import moment from "moment";
 
 const authAxios = Axios.create({
-  baseURL: "http://localhost:5261/api",
+  baseURL: import.meta.env.VITE_API_URL,
   paramsSerializer: (params) => {
     return Qs.stringify(params, {
       arrayFormat: "brackets",

@@ -1,8 +1,19 @@
 import { HiOutlineSearch } from "react-icons/hi";
 import BookingListTable from "./BookListTable";
-import { useBookingListQuery } from "./useBookings";
+import { useBookingCreateMutation, useBookingListQuery } from "./useBookings";
 import { useCallback, useState } from "react";
 import debounce from "lodash/debounce";
+import { BookingModel } from "@/types/booking";
+import { AddBookingModal } from "./AddBookingModal";
+
+const initialValues: BookingModel = {
+  id: "",
+  bookingDate: "",
+  bookingLocation: "",
+  facilityName: "",
+  chargeId: "",
+  inmateId: "",
+};
 
 const Booking = () => {
   const [page, setPage] = useState<number>(0);
@@ -10,12 +21,19 @@ const Booking = () => {
   const [searchString, setSearchString] = useState<string>("");
   const { isLoading, data } = useBookingListQuery(page, pageSize, searchString);
 
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const debouncedHandleInputChange = useCallback(
     debounce((value: string) => {
       setSearchString(value);
     }, 500),
     []
   );
+
+  const { mutateAsync: addBookingMutation } = useBookingCreateMutation();
+
+  const onSubmit = async (values: BookingModel) => {
+    await addBookingMutation(values);
+  };
   return (
     <>
       <div className="px-4 py-5 sm:p-6">
@@ -24,8 +42,11 @@ const Booking = () => {
             <h2 className="text-xl font-semibold text-gray-900">Booking</h2>
           </div>
           <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-            <button className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-              Add Inmate
+            <button
+              onClick={() => setIsAddModalOpen(true)}
+              className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            >
+              Add Booking
             </button>
           </div>
         </div>
@@ -40,6 +61,12 @@ const Booking = () => {
             onChange={(e) => debouncedHandleInputChange(e.target.value)}
           />
         </div>
+        <AddBookingModal
+          isOpen={isAddModalOpen}
+          onClose={() => setIsAddModalOpen(false)}
+          bookingModel={initialValues}
+          onSubmit={onSubmit}
+        />
         <div className="mt-8 flex flex-col">
           <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">

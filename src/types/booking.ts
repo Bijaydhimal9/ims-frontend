@@ -7,3 +7,11 @@ export interface BookingListModel{
     facilityName: string;
     bookingDate: Date;
 }
+export interface BookingModel {
+    id?: string;
+    bookingDate: string;
+    bookingLocation: string;
+    facilityName: string;
+    chargeId: string;
+    inmateId: string;
+  }
