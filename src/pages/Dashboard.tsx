@@ -11,7 +11,6 @@ interface TabStats {
   id: ViewType;
   icon: React.ReactNode;
   title: string;
-  value: string | number;
   description: string;
 }
 
@@ -42,9 +41,6 @@ const TabButton: React.FC<TabButtonProps> = ({ tab, isActive, onClick }) => (
         <p className={`text-sm font-medium ${isActive ? 'text-blue-700' : 'text-gray-600'}`}>
           {tab.title}
         </p>
-        <p className={`text-lg font-semibold ${isActive ? 'text-blue-700' : 'text-gray-900'}`}>
-          {tab.value}
-        </p>
       </div>
       <p className={`mt-1 text-sm ${isActive ? 'text-blue-600' : 'text-gray-500'}`}>
         {tab.description}
@@ -68,14 +64,12 @@ const Dashboard = ({ children }: { children?: React.ReactNode }) => {
             id: 'inmates',
             icon: <FiUsers />,
             title: 'Inmate Management',
-            value: '1,234',
             description: 'Total inmates currently in the system'
         },
         {
             id: 'booking',
             icon: <FiUserPlus />,
             title: 'Booking Management',
-            value: '856',
             description: 'Active booking records'
         },
     ];
