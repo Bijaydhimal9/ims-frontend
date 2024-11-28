@@ -15,7 +15,7 @@ const BookingSchema = Yup.object().shape({
   inmateId: Yup.string().required("Please select an inmate"),
   chargeId: Yup.string().required("Please select a charge"),
   bookingDate: Yup.date()
-    .max(new Date(), "Booking date cannot be in the future")
+    .min(new Date(), "Booking date must be in the future")
     .required("Booking date is required"),
   bookingLocation: Yup.string()
     .required("Booking location is required")

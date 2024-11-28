@@ -7,6 +7,7 @@ import type {
   User,
 } from "@/types/auth";
 import authAxios from "@/shared/axios/authAxios";
+import { toast } from "@/hooks/use-toast";
 
 const initialState: AuthState = {
   user: null,
@@ -78,8 +79,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       });
 
       navigate("/dashboard");
-    } catch (error) {
-      // Clear all auth data
+    } catch (error: any) {
+      const errorMessage =
+        error.response?.data?.message ||
+        error.message ||
+        "Failed to login. Please try again.";
+
+      toast({
+        variant: "destructive",
+        title: "Login Error",
+        description: errorMessage,
+      });
       localStorage.removeItem("isAuthenticated");
       localStorage.removeItem("user");
       localStorage.removeItem("jwt");
