@@ -14,7 +14,6 @@ interface BookingListTableProps {
 }
 
 const BookingListTable = ({ isLoading, bookings }: BookingListTableProps) => {
-  const [inmateModel, setInmateModel] = useState<InmateModel | null>(null);
   const [openReleaseModal, setOpenReleaseModal] = useState<boolean>(false);
   const [bookingId, setBookingId] = useState<string | null>(null);
   const [deleteBookingId, setDeleteBookingId] = useState<string | null>(null);
@@ -31,6 +30,7 @@ const BookingListTable = ({ isLoading, bookings }: BookingListTableProps) => {
   };
 
   const handleRelease = (id: string) => {
+    console.log(id);
     setBookingId(id);
     setOpenReleaseModal(true);
   };
